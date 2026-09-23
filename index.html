@@ -136,10 +136,9 @@
       <div class="field"><label>Cidade</label><input id="city" type="text" placeholder="Ex: São Paulo" required></div>
       <div class="field"><label>Bairro</label><input id="neighborhood" type="text" placeholder="Ex: Moema" required></div>
       <div class="field"><label>Tipo de serviço</label><select id="serviceType"><option value="Churrasco completo (Churrasco Nota 1000 cuida de tudo, alimentação e utensílios)">Churrasco completo (cuidamos de tudo: alimentação e utensílios)</option><option value="Apenas mão de obra (levar churrasqueiro e ajudante, caso necessário)">Apenas mão de obra (churrasqueiro e ajudante)</option></select></div>
-      <button class="btn primary" onclick="calculate()">CALCULAR ESTIMATIVA</button>
-      <button class="btn primary" style="margin-top:10px;width:100%" onclick="requestQuote()">📲 PEDIR ORÇAMENTO NO WHATSAPP</button>
+      <button class="btn primary" style="width:100%" onclick="requestQuote()">📲 PEDIR ORÇAMENTO NO WHATSAPP</button>
     </div>
-    <div class="tool"><h3>SEU RESULTADO</h3><div id="calcResult" class="result">Preencha os dados e clique em <strong>Calcular estimativa</strong> para ver quanto de carne, carvão e bebida você vai precisar. Depois, clique em <strong>Pedir orçamento no WhatsApp</strong> para falar direto com a gente.</div></div>
+    <div class="tool"><h3>COMO FUNCIONA</h3><div class="result">Preencha os dados do seu evento ao lado e clique em <strong>Pedir orçamento no WhatsApp</strong>. Sua mensagem já chega pronta, com todas as informações preenchidas, direto para o nosso time.</div></div>
   </div>
 </div></section>
 
@@ -230,8 +229,6 @@ function openRecipe(id){document.getElementById('modalContent').innerHTML=`<span
 function showInfo(type){let title=type==='privacidade'?'Política de privacidade':'Contato';let body=type==='privacidade'?'<p>Esta primeira versão utiliza armazenamento local apenas para funcionalidades do navegador. Antes de publicar, acrescente uma política de privacidade completa, consentimento de cookies quando aplicável e informações sobre o uso de serviços de anúncios.</p>':'<p>Para contato comercial, substitua este texto pelo seu e-mail profissional e links oficiais.</p>';document.getElementById('modalContent').innerHTML=`<h2>${title}</h2>${body}`;document.getElementById('modal').classList.add('open')}
 function closeModal(){document.getElementById('modal').classList.remove('open')}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-function estimateValues(){const a=+document.getElementById('adults').value||0,k=+document.getElementById('kids').value||0;const people=a+k*.55;const meat=people*.48;const charcoal=people*.42;const drinks=people*1.2;const beer=people*3.5;return{a,k,meat,charcoal,drinks,beer}}
-function calculate(){const{a,k,meat,charcoal,drinks,beer}=estimateValues();document.getElementById('calcResult').innerHTML=`<strong>Estimativa para ${a} adultos e ${k} crianças</strong><ul><li>🥩 Carnes: <strong>${meat.toFixed(1)} kg</strong></li><li>🔥 Carvão: <strong>${charcoal.toFixed(1)} kg</strong></li><li>🥤 Bebidas não alcoólicas: <strong>${drinks.toFixed(1)} L</strong></li><li>🍺 Cerveja: <strong>${beer.toFixed(0)} unidades de 350 ml</strong></li></ul><small style="color:#888">Estimativa inicial. Ajuste conforme duração do evento e perfil dos convidados.</small>`}
 function requestQuote(){
   const a=document.getElementById('adults').value||0;
   const k=document.getElementById('kids').value||0;
@@ -240,18 +237,12 @@ function requestQuote(){
   const neighborhood=document.getElementById('neighborhood').value.trim();
   const serviceType=document.getElementById('serviceType').value;
   if(!city||!neighborhood){alert('Por favor, preencha a cidade e o bairro onde será o churrasco.');return}
-  const{meat,charcoal,drinks,beer}=estimateValues();
   let msg=`Olá, gostaria de um orçamento para meu churrasco.\n\n`;
   msg+=`👥 Adultos: ${a}\n`;
   msg+=`🧒 Crianças: ${k}\n`;
   msg+=`🎉 Tipo de evento: ${eventType}\n`;
   msg+=`📍 Local: ${neighborhood} - ${city}\n`;
-  msg+=`🍖 Tipo de serviço: ${serviceType}\n\n`;
-  msg+=`Estimativa aproximada:\n`;
-  msg+=`- Carnes: ${meat.toFixed(1)} kg\n`;
-  msg+=`- Carvão: ${charcoal.toFixed(1)} kg\n`;
-  msg+=`- Bebidas não alcoólicas: ${drinks.toFixed(1)} L\n`;
-  msg+=`- Cerveja: ${beer.toFixed(0)} unidades de 350 ml`;
+  msg+=`🍖 Tipo de serviço: ${serviceType}`;
   const url=`https://api.whatsapp.com/send?phone=5511998883179&text=${encodeURIComponent(msg)}`;
   window.open(url,'_blank');
 }
